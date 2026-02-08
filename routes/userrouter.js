@@ -92,18 +92,20 @@ console.log("hit login api")
 
     // SET COOKIES 🔥
 res.cookie("accessToken", accesstoken, {
-  httpOnly: false,
-  secure: false,      // localhost
-  sameSite: "strict",    // 🔥 STRICT ❌ → LAX ✅
-  maxAge: 15 * 60 * 1000
+  httpOnly: true,          // 🔐 JS access block
+  secure: true,            // ✅ HTTPS only (Render)
+  sameSite: "none",        // ✅ cross-domain allowed
+  maxAge: 15 * 60 * 1000   // 15 minutes
 });
 
+
 res.cookie("refreshToken", refreshtoken, {
-  httpOnly: false,
-  secure: false,
-  sameSite: "strict",
-  maxAge: 7 * 24 * 60 * 60 * 1000
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 });
+
 
 let cart = [];
 if (user.cart && user.cart.length > 0) {
