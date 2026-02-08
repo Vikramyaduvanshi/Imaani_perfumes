@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: [
     "http://localhost:5173",          // dev
-    "https://your-frontend-domain",   // prod
+    "https://imani-frontend.vercel.app",   // prod
   ],
   credentials: true
 }));
