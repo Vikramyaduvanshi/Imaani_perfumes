@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: [
     "http://localhost:5173",          // dev
-    "https://imani-frontend.vercel.app",   // prod
+    "https://imaaniperfumes.com",   // prod
   ],
   credentials: true
 }));
