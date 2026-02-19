@@ -9,10 +9,16 @@ let users=["user", "admin"]
 Productrouter.get("/all-products", async (req, res) => {
 
   try {
-    let { page = 1, limit = 20, productname="", price, rating, minprice, maxprice, minrating } = req.query;
+    let { page = 1, limit = 20, productname="", price, rating, minprice, maxprice, minrating , category, producttype} = req.query;
 
     //learned: MATCH me agar kuch  nhi diya to sabhi products result me ayenge , leking sort me nhi dena hoga nhi to sort ko use mat kro, 
     let productsearch = {};
+if(category){
+  productsearch["category"]=category.toLowerCase()
+}
+if(producttype){
+  productsearch["producttype"]=producttype.toLowerCase()
+}
 
     if (productname && productname.trim() !== "") {
       productsearch.productname = { $regex: productname, $options: "i" };
@@ -59,10 +65,16 @@ if(minrating){
 });
 Productrouter.get("/all-perfume", async (req, res) => {
   try {
-    let { page = 1, limit = 20, productname, price, rating, minprice, maxprice, minrating} = req.query;
+    let { page = 1, limit = 20, productname, price, rating, minprice, maxprice, minrating, category, producttype} = req.query;
 
     //learned: MATCH me agar kuch  nhi diya to sabhi products result me ayenge , leking sort me nhi dena hoga nhi to sort ko use mat kro, 
     let productsearch = {};
+    if(category){
+      productsearch["category"]=category
+    }
+    if(producttype){
+      productsearch["producttype"]=producttype
+    }
 productsearch.producttype="perfume"  
     if (productname) {
       productsearch.productname = { $regex: productname, $options: "i" };
@@ -109,10 +121,16 @@ if(minrating){
 
 Productrouter.get("/all-cosmetic", async (req, res) => {
   try {
-    let { page = 1, limit = 20, productname, price, rating, minprice, maxprice, minrating } = req.query;
+    let { page = 1, limit = 20, productname, price, rating, minprice, maxprice, minrating ,category, producttype} = req.query;
 
     //learned: MATCH me agar kuch  nhi diya to sabhi products result me ayenge , leking sort me nhi dena hoga nhi to sort ko use mat kro, 
     let productsearch = {};
+        if(category){
+      productsearch["category"]=category
+    }
+    if(producttype){
+      productsearch["producttype"]=producttype
+    }
 productsearch.producttype="cosmetic"
     if (productname) {
       productsearch.productname = { $regex: productname, $options: "i" };
