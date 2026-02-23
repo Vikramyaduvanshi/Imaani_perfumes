@@ -295,8 +295,7 @@ next(e)
 
 userrouter.post("/update-profile", auth("user","admin") ,async (req,res,next)=>{
 try{
-  console.log(req.body)
-console.log(req.userId)
+
 let updated= await User.findByIdAndUpdate(req.userId, {...req.body},{ new:true})
 res.json({success:true, message:"updated scuccessfully", updated})
 }catch(e){
