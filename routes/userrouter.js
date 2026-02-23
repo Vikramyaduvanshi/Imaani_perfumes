@@ -95,7 +95,7 @@ console.log("hit login api")
 res.cookie("accessToken", accesstoken, {
   httpOnly: true,          
   secure: true,            
-  sameSite: "strict",       
+  sameSite: "none",       
   maxAge: 5*60 * 60 * 1000   
 });
 
@@ -103,7 +103,7 @@ res.cookie("accessToken", accesstoken, {
 res.cookie("refreshToken", refreshtoken, {
   httpOnly: true,
   secure: true,
-  sameSite: "strict",
+  sameSite: "none",
   maxAge: 7 * 24 * 60 * 60 * 1000 
 });
 
@@ -295,7 +295,7 @@ next(e)
 
 userrouter.post("/update-profile", auth("user","admin") ,async (req,res,next)=>{
 try{
-
+console.log(req.body)
 let updated= await User.findByIdAndUpdate(req.userId, {...req.body},{ new:true})
 res.json({success:true, message:"updated scuccessfully", updated})
 }catch(e){
