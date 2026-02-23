@@ -3,7 +3,8 @@ let userrouter= express.Router();
 let bcrypt= require("bcrypt")
 let jwt= require("jsonwebtoken");
 const { User } = require("../models/models");
-let nodemailer= require("nodemailer")
+let nodemailer= require("nodemailer");
+const auth = require("../middleware/Authmiddleware");
 
 
 userrouter.post("/signup", async(req,res)=>{
@@ -90,20 +91,20 @@ console.log("hit login api")
 
     const refreshtoken = jwt.sign( { userId: user._id, role: user.role },  process.env.JWTSECRET, { expiresIn: "7d" } );
 
-    // SET COOKIES 🔥
+
 res.cookie("accessToken", accesstoken, {
-  httpOnly: true,          // 🔐 JS access block
-  secure: true,            // ✅ HTTPS only (Render)
-  sameSite: "none",        // ✅ cross-domain allowed
-  maxAge: 15 * 60 * 1000   // 15 minutes
+  httpOnly: true,          
+  secure: true,            
+  sameSite: "strict",       
+  maxAge: 5*60 * 60 * 1000   
 });
 
 
 res.cookie("refreshToken", refreshtoken, {
   httpOnly: true,
   secure: true,
-  sameSite: "none",
-  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  sameSite: "strict",
+  maxAge: 7 * 24 * 60 * 60 * 1000 
 });
 
 
@@ -119,7 +120,7 @@ if (user.cart && user.cart.length > 0) {
     },
     {
       $lookup: {
-        from: "products", // ⚠️ exact collection name
+        from: "products", 
         localField: "cart.productId",
         foreignField: "_id",
         as: "product"
@@ -164,7 +165,7 @@ if (user.cart && user.cart.length > 0) {
 
 
 
- res.json({success: true,id: user._id,email: user.email,name: user.name,role: user.role,cart, message:"user login successfully"});
+ res.json({success: true,email: user.email,name: user.name,role: user.role,cart, message:"user login successfully"});
 
 
   } catch (e) {
@@ -180,12 +181,12 @@ if (user.cart && user.cart.length > 0) {
 
 
 userrouter.post("/logout", (req, res) => {
-  // Cookies delete karne ke liye empty value + expire
+ 
   res.cookie("accessToken", "", {
     httpOnly: true,
     secure: true,
     sameSite: "strict",
-    maxAge: 0, // expire immediately
+    maxAge: 0, 
   });
 
   res.cookie("refreshToken", "", {
@@ -289,6 +290,22 @@ next(e)
   }
 
 });
+
+
+
+userrouter.post("/update-profile", auth("user","admin") ,async (req,res,next)=>{
+try{
+  console.log(req.body)
+console.log(req.userId)
+let updated= await User.findByIdAndUpdate(req.userId, {...req.body},{ new:true})
+res.json({success:true, message:"updated scuccessfully", updated})
+}catch(e){
+res.json({message:e.message, success:false})
+}
+
+})
+
+
 
 
 module.exports=userrouter

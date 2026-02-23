@@ -43,9 +43,9 @@ console.log("before catch in auth",decodeRefresh)
             // send new cookie
             res.cookie("accessToken", newAccessToken, {
               httpOnly:true,
-              secure:false,
+              secure:true,
               sameSite:"strict",
-              maxAge:7*24*60*60*1000
+              maxAge:7 * 24 * 60 * 60 * 1000
             })
 
             req.userId = decodeRefresh.userId;
